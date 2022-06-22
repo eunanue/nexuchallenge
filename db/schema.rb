@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 2022_06_21_045750) do
   create_table "models", force: :cascade do |t|
     t.integer "brand_id", null: false
     t.string "name"
-    t.float "average_price"
+    t.float "average_price", default: 0.0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["brand_id"], name: "index_models_on_brand_id"

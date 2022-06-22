@@ -23,8 +23,10 @@ class Model < ApplicationRecord
   private
 
   def average_price_valid
-    if average_price < 100000
-      return errors.add(:average_price, 'cannot be lower that 100000')
+    if  average_price != 0.0 
+      if average_price < 100000 
+        return errors.add(:average_price, 'cannot be lower that 100000')
+      end
     end
   end
 

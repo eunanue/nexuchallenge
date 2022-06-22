@@ -1,19 +1,20 @@
 # Dockerfile
 # Use ruby image to build our own image
-FROM ruby:2.7.1
+FROM ruby:2.7.2
 
-RUN apt-get update -qq && apt-get install -y libsqlite3-dev
-WORKDIR /myapp
-COPY Gemfile /myapp/Gemfile
+RUN apt-get update -qq && apt-get install -y postgresql-client
+# throw errors if Gemfile has been modified since Gemfile.lock
+RUN bundle config --global frozen 1
 
+WORKDIR /app
+
+COPY Gemfile Gemfile.lock ./
 RUN bundle install
-COPY . /myapp
 
+COPY . .
 
-# Add a script to be executed every time the container starts.
-COPY entrypoints/docker-entrypoint.sh /usr/bin/
-RUN chmod +x /usr/bin/docker-entrypoint.sh
-ENTRYPOINT ["docker-entrypoint.sh"]
+RUN ["chmod", "+x", "./entrypoints/docker-entrypoint.sh"]
+ENTRYPOINT ["./entrypoints/docker-entrypoint.sh"]
 EXPOSE 3000
 
 # Start the main process.

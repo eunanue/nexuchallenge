@@ -28,10 +28,16 @@ class Api::V1::ModelsController < Api::ApiController
     end
 
     def search
-        greater = params[:greater]
-        lower = params[:lower]
-        @models = Model.all_models_greater_lower_price(greater,lower)
-        render json: @models, status: :ok
+        greater = params[:greater].to_i
+        lower = params[:lower].to_i
+        puts greater
+        puts lower
+        if lower > greater
+            render json: { error: "el precio menor no puede ser mayor al precio mayor" }, status: :bad_request
+        else
+            @models = Model.all_models_greater_lower_price(greater,lower)
+            render json: @models, status: :ok
+        end
     end
     
     private
